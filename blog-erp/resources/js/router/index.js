@@ -4,6 +4,9 @@ import Blog from '../pages/Blog.vue'
 import Contact from '../pages/Contact.vue'
 import Home from '../pages/Home.vue'
 import singleBlog from '../pages/singleBlog.vue'
+import Login from '../pages/auth/Login.vue'
+import Register from '../pages/auth/Register.vue'
+import Dashboard from '../pages/auth/Dashboard.vue'
 
 const routes =[
     {
@@ -32,6 +35,22 @@ const routes =[
         component: Blog,
         props:true
     },
+    {
+        path:'/login',
+        name:'Login',
+        component: Login,
+    },
+    {
+        path:'/register',
+        name:'Register',
+        component: Register,
+    },
+    {
+        path:'/dashboard',
+        name:'Dashboard',
+        component: Dashboard,
+    },
+
 
 ]
 
