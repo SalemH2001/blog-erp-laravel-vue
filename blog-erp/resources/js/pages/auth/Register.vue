@@ -1,27 +1,51 @@
 <template>
     <div id="backend-view">
-        <form>
+        <form @submit.prevent="submit">
             <h3>Sign Up Here</h3>
             <label for="name">Name</label>
-            <input type="text" id="name" />
-            <span class="error">error</span>
+            <input type="text" id="name" v-model="field.name" />
+            <span v-if="errors.name" class="error">{{ errors.name[0] }}</span>
 
             <label for="email">Email</label>
-            <input type="text" id="email" />
-            <span class="error">error</span>
+            <input type="text" id="email" v-model="field.email" />
+            <span v-if="errors.email" class="error">{{ errors.email[0] }}</span>
 
             <label for="password">Password</label>
-            <input type="password" id="password" />
-            <span class="error">error</span>
+            <input type="password" id="password" v-model="field.password" />
+            <span v-if="errors.password" class="error">{{ errors.password[0] }}</span>
 
             <label for="password_confirmation">Confirm password</label>
-            <input type="password" id="password_confirmation" />
+            <input type="password" id="password_confirmation" v-model="field.password_confirmation" />
 
             <button type="submit">Sign Up</button>
             <span>Have an account?<a href=""> Log in</a></span>
         </form>
     </div>
 </template>
+<script>
+export default {
+    data() {
+        return {
+            field: {
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: ''
+            },
+            errors:{}
+        }
+    },
+    methods: {
+        submit() {
+            axios.post('/api/register', this.field).then(() => {
+                this.$router.push({ name: 'Dashboard' })
+            }).catch((error) => {
+                this.errors=error.response.data.errors
+            })
+        }
+    }
+}
+</script>
   
 <style scoped>
 #backend-view {
@@ -79,7 +103,12 @@ form span {
     display: block;
     margin-top: 20px;
 }
-
+.error{
+    color:red;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 3px;
+}
 a {
     color: rgba(0, 46, 173, 0.8);
 }

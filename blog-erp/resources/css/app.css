@@ -516,3 +516,9 @@ textarea {
     border-radius: 3px;
 
 }
+.error{
+  color:red;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
