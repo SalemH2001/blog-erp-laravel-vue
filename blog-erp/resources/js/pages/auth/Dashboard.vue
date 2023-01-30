@@ -7,7 +7,7 @@
             <ul>
 
                 <li>
-                    <a href="">Create Post</a>
+                    <RouterLink :to="{name:'createCategory'}">Create Category</RouterLink>
                 </li>
                 <li>
                     <a href="">Create Category</a>

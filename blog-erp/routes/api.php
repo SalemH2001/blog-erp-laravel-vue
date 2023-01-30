@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -21,6 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->post('/logout',[AuthenticatedSessionController::class,'destroy']);
+Route::middleware('auth:sanctum')->post('/categories/create',[CategoryController::class,'store']);
+Route::middleware('auth:sanctum')->get('/categories',[CategoryController::class,'index']);
+Route::middleware('auth:sanctum')->get('/categories/{id}',[CategoryController::class,'show']);
+Route::middleware('auth:sanctum')->delete('/categories/{id}',[CategoryController::class,'destroy']);
+Route::middleware('auth:sanctum')->put('/categories/{id}',[CategoryController::class,'edit']);
 
 // // // // // // // // // // // // // // // PUBLIC ROUTES // // // // // // // // // // // // // // // // // // // // //
 Route::post('/register',[RegisteredUserController::class,'store']);

@@ -7,6 +7,9 @@ import singleBlog from '../pages/singleBlog.vue'
 import Login from '../pages/auth/Login.vue'
 import Register from '../pages/auth/Register.vue'
 import Dashboard from '../pages/auth/Dashboard.vue'
+import createCategory from '../pages/auth/categories/Create.vue'
+import categoriesList from '../pages/auth/categories/List.vue'
+import editCategories from '../pages/auth/categories/Edit.vue'
 
 const routes =[
     {
@@ -52,7 +55,25 @@ const routes =[
         name:'Dashboard',
         component: Dashboard,
         meta:{requiresAuth:true}
-
+    },
+    {
+        path:'/category/create',
+        name:'createCategory',
+        component: createCategory,
+        meta:{requiresAuth:true}
+    },
+    {
+        path:'/categories',
+        name:'categoriesList',
+        component: categoriesList,
+        meta:{requiresAuth:true}
+    },
+    {
+        path:'/categories/edit/:id',
+        name:'editCategories',
+        component: editCategories,
+        meta:{requiresAuth:true},
+        props:true
     },
 
 
