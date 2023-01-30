@@ -103,12 +103,7 @@ form span {
     display: block;
     margin-top: 20px;
 }
-.error{
-    color:red;
-    display: block;
-    margin-top: 10px;
-    margin-bottom: 3px;
-}
+
 a {
     color: rgba(0, 46, 173, 0.8);
 }
