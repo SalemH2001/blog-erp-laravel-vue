@@ -1,20 +1,44 @@
 <template>
   <div id="backend-view">
-    <form>
+    <form @submit.prevent="submit">
       <h3>Login Here</h3>
       <label for="email">Email</label>
-      <input type="text" id="email" />
-      <span class="error">error</span>
+      <input type="text" id="email" v-model="fields.email" />
+      <span v-if="errors.email" class="error">{{errors.email[0]}}</span>
 
       <label for="password">Password</label>
-      <input type="password" id="password" />
-      <span class="error">error</span>
+      <input type="password" id="password" v-model="fields.password"/>
+      <span v-if="errors.password" class="error">{{errors.password[0]}}</span>
 
       <button type="submit">Log In</button>
       <span>Don't have an account? <a href="">Sign up</a></span>
     </form>
   </div>
 </template>
+<script>
+export default{
+  data(){
+    return{
+      fields:{
+        email:'',
+        password:''
+      },
+      errors:{}
+    }
+  },
+  methods:{
+    submit(){
+      axios.post('/api/login',this.fields).then(()=>{
+        this.$router.push({name:'Dashboard'})
+        localStorage.setItem('authanticated','true')
+        this.$emit('updateSidebar')
+      }).catch((err)=>{
+        this.errors=err.response.data.errors;
+      })
+    }
+  }
+}
+</script>
 <style scoped>
 #backend-view {
   height: 100vh;

@@ -1,25 +1,52 @@
 <template>
     <div id="backend-view">
-        <div class="logout"><a href="#">Log out</a></div>
+        <div class="logout"><a @click="logout">Log out</a></div>
         <h1 class="heading">Dashboard</h1>
-        <span>Hi name !</span>
+        <span>Hi {{name}} !</span>
         <div class="links">
             <ul>
 
                 <li>
-
+                    <a href="">Create Post</a>
                 </li>
                 <li>
-
+                    <a href="">Create Category</a>
                 </li>
                 <li>
-
+                    <a href="">Categories List </a>
                 </li>
             </ul>
         </div>
     </div>
 </template>
+<script>
+export default{
+    data(){
+        return{
+            name:'',
 
+        }
+    },
+    mounted(){
+        axios.get('/api/user').then((response)=>{
+            this.name=response.data.name
+        }).catch((err)=>{
+            console.log(err)
+        })
+    },
+    methods:{
+        logout(){
+            axios.post('/api/logout').then(()=>{
+                this.$router.push({name:'Home'})
+                localStorage.removeItem('authanticated')
+                this.$emit('updateSidebar')
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+}
+</script>
 <style scoped>
 /* dashboard */
 #backend-view {
