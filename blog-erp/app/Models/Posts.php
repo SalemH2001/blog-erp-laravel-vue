@@ -19,4 +19,9 @@ class Posts extends Model
             $post->slug = Str::of($post->title)->slug('-');
         });
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

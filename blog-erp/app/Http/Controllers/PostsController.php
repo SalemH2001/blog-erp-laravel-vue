@@ -3,12 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Posts;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
+
+    public function index()
+    {
+        return Posts::with('user')->take(4)->get();
+    }
+    
+    public function show($slug)
+    {
+        $post = Posts::with('user')->where('slug', $slug)->first();
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+        $post->body = html_entity_decode($post->body);
+
+        return $post;
+    }
+
+
     public function store(Request $request)
     {
         $request->validate([

@@ -6,18 +6,13 @@
         <div class="links">
             <ul>
                 <li>
+                    <RouterLink :to="{ name: 'createPosts' }">Create Post</RouterLink>
+                </li>
+                <li>
                     <RouterLink :to="{ name: 'createCategory' }">Create Category</RouterLink>
                 </li>
                 <li>
                     <a href="">Categories List </a>
-                </li>
-            </ul>
-            <ul>
-                <li>
-                    <RouterLink :to="{ name: 'createPosts' }">Create Post</RouterLink>
-                </li>
-                <li>
-                    <a href="">Posts List </a>
                 </li>
             </ul>
         </div>
@@ -36,8 +31,8 @@ export default {
             this.name = response.data.name
         }).catch((err) => {
             if (err.response.status === "401") {
-                this.$emit('updateSidebar')
                 localStorage.removeItem('authenticated')
+                this.$emit('updateSidebar')
                 this.$router.push({ name: 'Login' })
             }
         })
