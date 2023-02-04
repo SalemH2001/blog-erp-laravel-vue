@@ -30,7 +30,7 @@ export default{
     submit(){
       axios.post('/api/login',this.fields).then(()=>{
         this.$router.push({name:'Dashboard'})
-        localStorage.setItem('authanticated','true')
+        localStorage.setItem('authenticated','true')
         this.$emit('updateSidebar')
       }).catch((err)=>{
         this.errors=err.response.data.errors;

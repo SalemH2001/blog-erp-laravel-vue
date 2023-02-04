@@ -10,6 +10,7 @@ import Dashboard from '../pages/auth/Dashboard.vue'
 import createCategory from '../pages/auth/categories/Create.vue'
 import categoriesList from '../pages/auth/categories/List.vue'
 import editCategories from '../pages/auth/categories/Edit.vue'
+import createPosts from '../pages/auth/posts/Create.vue'
 
 const routes =[
     {
@@ -75,6 +76,12 @@ const routes =[
         meta:{requiresAuth:true},
         props:true
     },
+    {
+        path:'/post/create',
+        name:'createPosts',
+        component: createPosts,
+        meta:{requiresAuth:true}
+    },
 
 
 ]
@@ -84,17 +91,16 @@ const router =createRouter({
     routes
 })
 
-router.beforeEach((to,from)=>{
-    const authenticated = localStorage.getItem('authanticated')
-    if(to.meta.requiresGuest && authenticated){
-        return{
-            name:'Dashboard'
-        }
-    }else if(to.meta.requiresAuth && !authenticated){
-        return{
-            name:'Login'
-        }
+router.beforeEach((to, from, next) => {
+    const authenticated = localStorage.getItem('authenticated')
+    if (to.meta.requiresGuest && authenticated) {
+      next({ name: 'Dashboard' })
+    } else if (to.meta.requiresAuth && !authenticated) {
+      next({ name: 'Login' })
+    } else {
+      next()
     }
-});
+  })
+  
 
 export default router

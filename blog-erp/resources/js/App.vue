@@ -86,7 +86,7 @@ export default {
         }
     },
     mounted(){
-        if(localStorage.getItem('authanticated')){
+        if(localStorage.getItem('authenticated')){
             this.loggedIn=true
         }else{
             this.loggedIn=false

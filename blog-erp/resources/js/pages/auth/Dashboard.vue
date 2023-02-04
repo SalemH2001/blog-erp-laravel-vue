@@ -2,49 +2,53 @@
     <div id="backend-view">
         <div class="logout"><a @click="logout">Log out</a></div>
         <h1 class="heading">Dashboard</h1>
-        <span>Hi {{name}} !</span>
+        <span>Hi {{ name }} !</span>
         <div class="links">
             <ul>
-
                 <li>
-                    <RouterLink :to="{name:'createCategory'}">Create Category</RouterLink>
-                </li>
-                <li>
-                    <a href="">Create Category</a>
+                    <RouterLink :to="{ name: 'createCategory' }">Create Category</RouterLink>
                 </li>
                 <li>
                     <a href="">Categories List </a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <RouterLink :to="{ name: 'createPosts' }">Create Post</RouterLink>
+                </li>
+                <li>
+                    <a href="">Posts List </a>
                 </li>
             </ul>
         </div>
     </div>
 </template>
 <script>
-export default{
-    data(){
-        return{
-            name:'',
+export default {
+    data() {
+        return {
+            name: '',
 
         }
     },
-    mounted(){
-        axios.get('/api/user').then((response)=>{
-            this.name=response.data.name
-        }).catch((err)=>{
-            if(err.response.status === "401"){
+    mounted() {
+        axios.get('/api/user').then((response) => {
+            this.name = response.data.name
+        }).catch((err) => {
+            if (err.response.status === "401") {
                 this.$emit('updateSidebar')
-                localStorage.removeItem('authanticated')
-                this.$router.push({name:'Login'})
+                localStorage.removeItem('authenticated')
+                this.$router.push({ name: 'Login' })
             }
         })
     },
-    methods:{
-        logout(){
-            axios.post('/api/logout').then(()=>{
-                this.$router.push({name:'Home'})
-                localStorage.removeItem('authanticated')
+    methods: {
+        logout() {
+            axios.post('/api/logout').then(() => {
+                this.$router.push({ name: 'Home' })
+                localStorage.removeItem('authenticated')
                 this.$emit('updateSidebar')
-            }).catch((err)=>{
+            }).catch((err) => {
                 console.log(err)
             })
         }
