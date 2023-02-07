@@ -6,16 +6,24 @@
         <div class="links">
             <ul>
                 <li>
-                    <RouterLink :to="{ name: 'createPosts' }">Create Post</RouterLink>
-                </li>
-                <li>
                     <RouterLink :to="{ name: 'createCategory' }">Create Category</RouterLink>
                 </li>
                 <li>
-                    <a href="">Categories List </a>
+                    <RouterLink :to="{ name: 'categoriesList' }">Categories List </RouterLink>
                 </li>
             </ul>
         </div>
+        <div class="links">
+            <ul>
+                <li>
+                    <RouterLink :to="{ name: 'createPosts' }">Create Post</RouterLink>
+                </li>
+                <li>
+                    <RouterLink :to="{ name: 'DashboardPostsList' }">Posts List </RouterLink>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </template>
 <script>

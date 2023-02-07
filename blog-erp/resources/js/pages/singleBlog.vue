@@ -18,31 +18,14 @@
     <section class="recommended">
         <p>Related</p>
         <div class="recommended-cards">
-            <a href="">
+            <RouterLink  v-for="post in relatedPosts" :key="post.id" :to="{ name: 'singleBlog', params: { slug: post.slug } }">
                 <div class="recommended-card">
-                    <img src="images/pic5.jpg" alt="" loading="lazy" />
+                    <img :src="`/${post.ImagePath}`" alt="" loading="lazy" />
                     <h4>
-                        12 Health Benefits Of Pomegranate Fruit
+                        {{ post.title }}
                     </h4>
                 </div>
-            </a>
-            <a href="">
-                <div class="recommended-card">
-                    <img src="images/pushups.jpg" alt="" loading="lazy" />
-                    <h4>
-                        The Truth About Pushups
-                    </h4>
-                </div>
-            </a>
-            <a href="">
-                <div class="recommended-card">
-                    <img src="images/smoothies.jpg" alt="" loading="lazy" />
-                    <h4>
-                        Healthy Smoothies
-                    </h4>
-                </div>
-            </a>
-
+            </RouterLink>
         </div>
     </section>
 </template>
@@ -59,6 +42,7 @@ export default {
             post: {
                 user:{}
             },
+            relatedPosts:[]
         };
     },
     mounted() {
@@ -69,6 +53,12 @@ export default {
             .catch(err => {
                 console.error(err);
             });
+
+        axios.get(`/api/relatedPosts/${this.slug}`).then((res)=>{
+            this.relatedPosts=res.data
+        }).catch((err)=>{
+            console.log(err)
+        })
     },
     methods: {
         formatDate(date) {

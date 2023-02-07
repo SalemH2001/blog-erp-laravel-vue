@@ -9,9 +9,33 @@ use Illuminate\Support\Facades\Auth;
 class PostsController extends Controller
 {
 
-    public function index()
+    public function homeindex()
     {
         return Posts::with('user')->take(4)->get();
+    }
+
+    public function relatedPosts($slug)
+    {
+        $post = Posts::where('slug', $slug)->first();
+
+        if ($post) {
+            $category = $post->categories;
+            if ($category) {
+                $relatedPosts = $category->posts()->where('id', '!=', $post->id)->take(4)->get();
+                return $relatedPosts;
+            }
+        }
+
+        return [];
+    }
+
+    public function dashboardPosts(){
+        return Posts::where('user_id', auth()->user()->id)->latest()->get();
+    }
+
+    public function index()
+    {
+        return Posts::with('user','categories')->paginate(4);
     }
     
     public function show($slug)
@@ -51,5 +75,36 @@ class PostsController extends Controller
     
         $post->save();
     }
+
+    function edit(Request $request,$slug){
+        $request->validate([
+            'title' => ['string', 'required', 'max:100'],
+            'file' => ['image'],
+            'body' => ['required', 'string'],
+            'category_id' => ['required','integer'],
+
+        ]);
+        $post = Posts::where('slug', $slug)->first();
+        $categories_id = $request->input('category_id');
+        $body = $request->input('body');
+        if($request->input('file')){
+            $imagePath = 'storage/' . $request->file('file')->store('postsImage', 'public');
+        }else $imagePath= $post->ImagePath;
+        $post->title = $request->input('title');
+        $post->category_id = $categories_id;
+        $post->body = htmlentities($body);
+        $post->ImagePath = $imagePath;
+        $post->save();
+
+    }
     
+    public function destroy($slug)
+    {
+        $post=Posts::where('slug',$slug)->first();
+        if ($post->delete()) {
+            return response()->json(null, 204);
+        } else {
+            return response()->json(['error' => 'Bad Request'], 400);
+        }
+    }
 }

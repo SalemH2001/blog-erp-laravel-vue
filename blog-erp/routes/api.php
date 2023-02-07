@@ -31,7 +31,9 @@ Route::middleware('auth:sanctum')->put('/categories/{id}',[CategoryController::c
 
 //Posts
 Route::middleware('auth:sanctum')->post('/posts/create',[PostsController::class,'store']);
-
+Route::middleware('auth:sanctum')->delete('/posts/{slug}',[PostsController::class,'destroy']);
+Route::middleware('auth:sanctum')->get('/dashboard-posts',[PostsController::class,'dashboardPosts']);
+Route::middleware('auth:sanctum')->put('/posts/{slug}',[PostsController::class,'edit']);
 
 
 // // // // // // // // // // // // // // // PUBLIC ROUTES // // // // // // // // // // // // // // // // // // // // //
@@ -42,5 +44,8 @@ Route::post('/login',[AuthenticatedSessionController::class,'store']);
 Route::get('/categories',[CategoryController::class,'index']);
 
 //Posts
+Route::get('/home-posts',[PostsController::class,'homeindex']);
 Route::get('/posts',[PostsController::class,'index']);
 Route::get('/posts/{slug}',[PostsController::class,'show']);
+Route::get('/relatedPosts/{slug}',[PostsController::class,'relatedPosts']);
+

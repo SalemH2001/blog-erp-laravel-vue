@@ -33,7 +33,7 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/posts').then((res) => {
+        axios.get('/api/home-posts').then((res) => {
             this.posts = res.data
         }).catch(() => {
             console.log(err)

@@ -11,6 +11,9 @@ import createCategory from '../pages/auth/categories/Create.vue'
 import categoriesList from '../pages/auth/categories/List.vue'
 import editCategories from '../pages/auth/categories/Edit.vue'
 import createPosts from '../pages/auth/posts/Create.vue'
+import DashboardPostsList from '../pages/auth/posts/List.vue'
+import EditPosts from '../pages/auth/posts/Edit.vue'
+
 
 const routes =[
     {
@@ -81,6 +84,19 @@ const routes =[
         path:'/post/create',
         name:'createPosts',
         component: createPosts,
+        meta:{requiresAuth:true}
+    },
+    {
+        path:'/posts',
+        name:'DashboardPostsList',
+        component: DashboardPostsList,
+        meta:{requiresAuth:true}
+    },
+    {
+        path:'/posts/:slug',
+        name:'EditPosts',
+        component: EditPosts,
+        props:true,
         meta:{requiresAuth:true}
     },
 
