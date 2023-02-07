@@ -4,7 +4,7 @@
         <h2 class="header-title">All Blog Posts</h2>
         <div class="searchbar">
             <form action="">
-                <input type="text" placeholder="Search..." name="search" />
+                <input type="text" placeholder="Search..." name="search" v-model="title"/>
 
                 <button type="submit">
                     <i class="fa fa-search"></i>
@@ -15,7 +15,7 @@
         <div class="categories">
             <ul>
                 <li v-for="category in categories" :key="category.id">
-                    <a href="#">{{
+                    <a href="#" @click="filterByCategory(category.name)">{{
                         category.name
                     }}</a>
                 </li>
@@ -35,10 +35,12 @@
                 </h4>
             </div>
         </section>
+        <h3 v-if="!posts.length">Sorry no match was found</h3>
     </main>
 </template>
 
 <script>
+import axios from 'axios'
 import moment from 'moment'
 export default {
     emits: ['updateSidebar'],
@@ -46,7 +48,21 @@ export default {
     data() {
         return {
             posts: [],
-            categories: []
+            categories: [],
+            title:''
+        }
+    },
+    watch:{
+        title(){
+            axios.get('/api/posts', {
+                params: {
+                    search: this.title,
+                },
+            }).then((res) => {
+                this.posts = res.data.data
+            }).catch((err) => {
+                console.log(err)
+            })
         }
     },
     mounted() {
@@ -68,6 +84,26 @@ export default {
             return moment(date).fromNow()
         },
 
+        filterByCategory(name) {
+            axios.get('/api/posts', {
+                params: {
+                    category: name,
+                },
+            }).then((res) => {
+                this.posts = res.data.data
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+
     }
 }
 </script>
+<style scoped>
+ h3{
+    font-size: 30px;
+    text-align: center;
+    margin: 30px 0;
+    color:#fff;
+ }
+</style>

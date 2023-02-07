@@ -34,10 +34,22 @@ class PostsController extends Controller
         return Posts::where('user_id', auth()->user()->id)->latest()->get();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return Posts::with('user','categories')->paginate(4);
-    }
+        $query = Posts::with('user', 'categories');
+    
+        if ($request->category) {
+            $query->whereHas('categories', function ($query) use ($request) {
+                $query->where('name', $request->category);
+            });
+        }
+    
+        if ($request->search) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+    
+        return $query->latest()->paginate(4);
+    }    
     
     public function show($slug)
     {
