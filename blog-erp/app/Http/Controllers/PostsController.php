@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Posts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostsController extends Controller
 {
@@ -76,26 +77,37 @@ class PostsController extends Controller
         $post->save();
     }
 
-    function edit(Request $request,$slug){
+    public function update(Request $request,$slug)
+    {
+        $post=Posts::where('slug',$slug)->first();
+        if (auth()->user()->id !== $post->user->id) {
+            return abort(403);
+        }
         $request->validate([
-            'title' => ['string', 'required', 'max:100'],
-            'file' => ['image'],
-            'body' => ['required', 'string'],
-            'category_id' => ['required','integer'],
-
+            'title' => 'required',
+            'file' => 'nullable | image',
+            'body' => 'required',
+            'category_id' => 'required'
         ]);
-        $post = Posts::where('slug', $slug)->first();
-        $categories_id = $request->input('category_id');
-        $body = $request->input('body');
-        if($request->input('file')){
-            $imagePath = 'storage/' . $request->file('file')->store('postsImage', 'public');
-        }else $imagePath= $post->ImagePath;
-        $post->title = $request->input('title');
-        $post->category_id = $categories_id;
-        $post->body = htmlentities($body);
-        $post->ImagePath = $imagePath;
-        $post->save();
 
+        $title = $request->title;
+        $category_id = $request->category_id;
+
+
+        $slug = Str::slug($title, '-') . '-' . $post->id;
+        $body = $request->input('body');
+
+        if ($request->file('file')) {
+            $imagePath = 'storage/' . $request->file('file')->store('postsImages', 'public');
+            $post->imagePath = $imagePath;
+        }
+
+        // create and save post
+        $post->title = $title;
+        $post->category_id = $category_id;
+        $post->slug = $slug;
+        $post->body = $body;
+        return $post->save();
     }
     
     public function destroy($slug)

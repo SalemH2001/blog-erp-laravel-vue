@@ -18,7 +18,7 @@
 
           <!-- Image -->
           <label for="image"><span>Image</span></label>
-          <input type="file" id="image" @input="grabFile" :value="fields.file" />
+          <input type="file" id="image" @input="grabFile" />
           <span v-if="errors.file" class="error">{{ errors.file[0] }}</span>
           <div class="preview">
             <img :src="url" alt="" />
@@ -75,10 +75,11 @@ export default {
       const fd = new FormData();
       fd.append("title", this.fields.title);
       fd.append("category_id", this.fields.category_id);
+      fd.append("body", this.fields.body);
+
       if (this.fields.file) {
         fd.append("file", this.fields.file);
       }
-      fd.append("body", this.fields.body);
       fd.append("_method", "PUT");
       axios
         .post(`/api/posts/${this.slug}`, fd, {
