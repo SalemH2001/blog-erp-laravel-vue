@@ -1,10 +1,10 @@
 <template>
     <!-- main -->
-    <main class="container">
+    <div class="container">
         <h2 class="header-title">All Blog Posts</h2>
         <div class="searchbar">
             <form action="">
-                <input type="text" placeholder="Search..." name="search" v-model="title"/>
+                <input type="text" placeholder="Search..." name="search" v-model="title" />
 
                 <button type="submit">
                     <i class="fa fa-search"></i>
@@ -36,7 +36,11 @@
             </div>
         </section>
         <h3 v-if="!posts.length">Sorry no match was found</h3>
-    </main>
+        <div class="pagination" id="pagination">
+            <a href="#" v-for="(link, index) in links" :key="index" v-html="link.label"
+                :class="{ active: link.active, disabled: !link.url }" @click="changePage(link)"></a>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -49,17 +53,19 @@ export default {
         return {
             posts: [],
             categories: [],
-            title:''
+            title: '',
+            links: [],
         }
     },
-    watch:{
-        title(){
+    watch: {
+        title() {
             axios.get('/api/posts', {
                 params: {
                     search: this.title,
                 },
             }).then((res) => {
                 this.posts = res.data.data
+                this.links=res.data.links
             }).catch((err) => {
                 console.log(err)
             })
@@ -68,8 +74,8 @@ export default {
     mounted() {
         axios.get('/api/posts').then((res) => {
             this.posts = res.data.data
-            console.log(this.posts)
-        }).catch(() => {
+            this.links=res.data.links
+        }).catch((err) => {
             console.log(err)
         }),
 
@@ -91,19 +97,33 @@ export default {
                 },
             }).then((res) => {
                 this.posts = res.data.data
+                this.links=res.data.links
             }).catch((err) => {
                 console.log(err)
             })
-        }
-
+        },
+        changePage(link) {
+            if (!link.url || link.active) {
+                retun;
+            }
+            axios
+                .get(link.url)
+                .then((res) => {
+                    this.posts = res.data.data;
+                    this.links=res.data.links     
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
     }
 }
 </script>
 <style scoped>
- h3{
+h3 {
     font-size: 30px;
     text-align: center;
     margin: 30px 0;
-    color:#fff;
- }
+    color: #fff;
+}
 </style>
